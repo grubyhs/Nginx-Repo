@@ -1,18 +1,18 @@
-# Default values for new.
+# Default values for nginx-ingress.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 2
+replicaCount: 1
 
 image:
-  repository: grubyhs/nginxv3
+  repository: nginx/nginx-ingress
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: ""
 
 imagePullSecrets: []
-nameOverride: "nginx-final"
-fullnameOverride: "nginx-final-edition"
+nameOverride: "nginx-ingress"
+fullnameOverride: "nginx-ingress-add"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -21,7 +21,7 @@ serviceAccount:
   annotations: {}
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
-  name: "nginx"
+  name: ""
 
 podAnnotations: {}
 
@@ -61,12 +61,12 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-limits:
-  cpu: 100m
-  memory: 128Mi
-requests:
-  cpu: 100m
-  memory: 128Mi
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
 
 autoscaling:
   enabled: false
@@ -80,18 +80,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-secret:
-  enabled: false
-  data:
-    enc_key: njsprlwa8d64fvnsfnjsk61156aodlmr
-    enc_iv: 48914829jfs2
-    sql_user: root
-    sql_password: password
-    redis_password: rpass
-    redis_prefix: k34234
-
-configmap:
-  enabled: true
-  data:
-    db_host: nginx-service
