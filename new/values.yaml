@@ -1,0 +1,174 @@
+# Default values for new.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: grubyhs/nginxv3
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: "nginx-helm"
+fullnameOverride: "nginx-helm-chart"
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: "testowy"
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+limits:
+  cpu: 100m
+  memory: 128Mi
+requests:
+  cpu: 100m
+  memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+secret:
+  enabled: false
+  data:
+    enc_key: njsprlwa8d64fvnsfnjsk61156aodlmr
+    enc_iv: 48914829jfs2
+    sql_user: root
+    sql_password: password
+    redis_password: rpass
+    redis_prefix: k34234
+
+configmap:
+  enabled: true
+  data:
+    db_host: nginx-service
+
+sync:
+  # use `.sync.state: secret` to store flux's state as an annotation on the secret (instead of a git tag)
+  state: git
+  # Duration after which sync operations time out (defaults to 1m)
+  timeout:
+  # Controls how often Flux will apply what’s in git, to the cluster, absent new commits.
+  # Reducing this interval below a minute or so may hinder Flux, since syncs can take tens of seconds,
+  # leaving not much time to do other operations.
+  #  interval: "5m"
+
+namespace: nginx
+
+git:
+  # URL of git repo with Kubernetes manifests; e.g. git.url=ssh://git@github.com/fluxcd/flux-get-started
+  url: "git@github.com:grubyhs/Repozytorium"
+  # Branch of git repo to use for Kubernetes manifests
+  branch: "main"
+  # Path within git repo to locate Kubernetes manifests (relative path)
+  path: ""
+  # Set to `true` if you intend for Flux to not be able to push changes to git.
+  # Also configure state.mode to `secret` since storing state in a git tag will no longer be possible.
+  readonly: false
+  # Username to use as git committer
+  user: "grubyhs"
+  # Email to use as git committer
+  email: "themcgmgs@gmail.com"
+  # If set, commits will be signed with this GPG key.
+  signingKey: ""
+  # If set, the signatures of the sync tag and commits will be verified (deprecated)
+  verifySignatures: false
+  # If set, takes precendence over verifySignatures and sets which strategy to use for signature verification (one of "all", "none", "first-parent")
+  verifySignaturesMode: ""
+  # If set, the author of git commits will reflect the user who initiated the commit and will differ from the git committer.
+  setAuthor: false
+  # Label to keep track of sync progress
+  label:
+  # Append "[ci skip]" to commit messages so that CI will skip builds
+  ciSkip: false
+  # Period at which to poll git repo for new commits
+  pollInterval: "5m"
+  # Duration after which git operations time out
+  timeout: "20s"
+  # The secret name can be used to supply your own SSH key, instead of
+  # relying on Flux to generate one for you:
+  # 1. Generate a SSH key named identity:
+  #      ssh-keygen -q -N "" -f ./identity
+  # 2. Create a Kubernetes secret:
+  #      kubectl -n flux create secret generic flux-ssh --from-file=./identity
+  #   2a. The SSH key will be stored in a data key matching the file name.
+  #       Set the `git.secretDataKey` value below to change the data key if
+  #       you want to use a different source file.
+  # 3. Don't check these key files into your Git repository! Once you've created
+  #    the Kubernetes secret, Delete the private key:
+  #      rm ./identity
+  # 4. Add ./identity.pub as a deployment key with write access in your Git repo
+  # 5. Set the secret name (flux-ssh) below
+  secretName: "flux-ssh"
+  # The default secret data key for storing the Git repository deploy key
+  # is "identity" which must match the filename in the steps for supplying
+  # your own SSH deploy key (see secretName above).  Use this field if you
+  # want to use your own filename and override the key above.
+  secretDataKey: ""
+  # Enables `git-secret` support, as this makes use of known GPG keys
+  # you will need to have imported the paired secret-key with one of
+  # the public-keys which were used in the encryption using
+  # `gpgKeys.secretName`.
+  secret:
+    enabled: false
+  # Global Git configuration See https://git-scm.com/docs/git-config for more details.
+  config:
+    enabled: false
+    secretName: ""
+    data: ""
+    # data: |
+    #   [credential "https://github.com"]
+    #           username = foo
