@@ -1,14 +1,25 @@
-# Default values for new.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: grubyhs/nginxv3
   pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
+
+livenessProbe:
+  exec:
+    command:
+    - cat
+    - /tmp/healthy
+  initialDelaySeconds: 5
+  periodSeconds: 5
+
+readinessProbe:
+  httpGet:
+    scheme: HTTPS
+    path: /index.html
+    port: 8443
+  initialDelaySeconds: 10
+  periodSeconds: 5
 
 imagePullSecrets: []
 nameOverride: "nginx-final"
@@ -26,15 +37,8 @@ serviceAccount:
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -52,15 +56,8 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
 limits:
   cpu: 100m
   memory: 128Mi
@@ -73,7 +70,7 @@ autoscaling:
   minReplicas: 1
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 
