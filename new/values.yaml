@@ -22,7 +22,7 @@ livenessProbe:
   httpGet:
     path: /var/www/html/index.html
     port: 80
-  initialDelaySeconds: 60
+  initialDelaySeconds: 120
   periodSeconds: 5
 readinessProbe:
   httpGet:
