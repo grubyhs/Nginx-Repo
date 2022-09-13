@@ -18,6 +18,19 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: "nginx"
 
+          livenessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /var/www/html/index.html
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
 podAnnotations: {}
 
 podSecurityContext: {}
@@ -63,7 +76,7 @@ tolerations: []
 affinity: {}
 
 secret:
-  enabled: false
+  enabled: true
   data:
     enc_key: njsprlwa8d64fvnsfnjsk61156aodlmr
     enc_iv: 48914829jfs2
