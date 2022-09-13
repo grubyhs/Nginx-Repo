@@ -22,13 +22,13 @@ livenessProbe:
   httpGet:
     path: /var/www/html/index.html
     port: 80
-  initialDelaySeconds: 10
+  initialDelaySeconds: 60
   periodSeconds: 5
 readinessProbe:
   httpGet:
     path: /var/www/html/index.html
     port: 80
-  initialDelaySeconds: 10
+  initialDelaySeconds: 60
   periodSeconds: 5
 
 podAnnotations: {}
@@ -76,7 +76,7 @@ tolerations: []
 affinity: {}
 
 secret:
-  enabled: false
+  enabled: true
   data:
     enc_key: njsprlwa8d64fvnsfnjsk61156aodlmr
     enc_iv: 48914829jfs2
