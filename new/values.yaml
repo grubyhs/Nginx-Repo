@@ -76,7 +76,7 @@ tolerations: []
 affinity: {}
 
 secret:
-  enabled: true
+  enabled: false
   data:
     enc_key: njsprlwa8d64fvnsfnjsk61156aodlmr
     enc_iv: 48914829jfs2
