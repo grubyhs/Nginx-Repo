@@ -51,8 +51,8 @@ spec:
                 name: nginx-secret
           {{- end }}      
         {{- end }}        
-          livenessProbe: {{- .Values.livenessProbe }}
-          readinessProbe: {{- .Values.readinessProbe }}
+          livenessProbe: {{- toYaml .Values.livenessProbe }}
+          readinessProbe: {{- toYaml .Values.readinessProbe }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
