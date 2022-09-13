@@ -51,14 +51,19 @@ spec:
                 name: nginx-secret
           {{- end }}      
         {{- end }}        
-          #livenessProbe:
-           # httpGet:
-            #  path: /
-             # port: http
-          #readinessProbe:
-           # httpGet:
-            #  path: /
-             # port: http
+          livenessProbe:
+            httpGet:
+              path: /index.html
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          readinessProbe:
+           httpGet:
+            scheme: HTTPS
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

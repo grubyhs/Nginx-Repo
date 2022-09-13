@@ -5,22 +5,6 @@ image:
   pullPolicy: Always
   tag: "latest"
 
-livenessProbe:
-  exec:
-    command:
-    - cat
-    - /tmp/healthy
-  initialDelaySeconds: 5
-  periodSeconds: 5
-
-readinessProbe:
-  httpGet:
-    scheme: HTTPS
-    path: /index.html
-    port: 8443
-  initialDelaySeconds: 10
-  periodSeconds: 5
-
 imagePullSecrets: []
 nameOverride: "nginx-final"
 fullnameOverride: "nginx-final-edition"
@@ -60,10 +44,10 @@ ingress:
 resources: {}
 limits:
   cpu: 100m
-  memory: 128Mi
+  memory: 256Mi
 requests:
   cpu: 100m
-  memory: 128Mi
+  memory: 256Mi
 
 autoscaling:
   enabled: false
