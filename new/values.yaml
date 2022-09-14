@@ -20,16 +20,16 @@ serviceAccount:
 
 livenessProbe:
   httpGet:
-    path: /var/www/html/index.html
+    path: /
     port: 80
-  initialDelaySeconds: 120
+  initialDelaySeconds: 25
   periodSeconds: 10
 readinessProbe:
   httpGet:
-    path: /var/www/html/index.html
+    path: /
     port: 80
-  initialDelaySeconds: 60
-  periodSeconds: 5
+  initialDelaySeconds: 25
+  periodSeconds: 10
 
 podAnnotations: {}
 
